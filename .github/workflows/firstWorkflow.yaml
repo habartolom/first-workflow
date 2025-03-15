@@ -9,11 +9,15 @@ jobs:
     My-First-Job:
         name: My First Job
         runs-on: ubuntu-latest
+        outputs:
+            my-output: ${{ steps.print-message.outputs.result }}
         steps:
             - name: Print a message
+              id: print-message
               env:
-                MY_VARIABLE: Hello, World!
+                MY_VARIABLE: "Hello, World!"
               run: |
-                echo $MY_VARIABLE
+                echo $MY_VARIABLE.
+                echo "::set-output name=result::${MY_VARIABLE}"
             
         
