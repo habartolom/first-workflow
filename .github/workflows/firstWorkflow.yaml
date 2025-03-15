@@ -1,0 +1,19 @@
+name: First Workflow
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    My-First-Job:
+        name: My First Job
+        runs-on: ubuntu-latest
+        steps:
+            - name: Print a message
+              env:
+                MY_VARIABLE: Hello, World!
+              run: |
+                echo $MY_VARIABLE
+            
+        
