@@ -17,7 +17,6 @@ jobs:
               env:
                 MY_VARIABLE: "Hello, World!"
               run: |
-                echo $MY_VARIABLE.
-                echo "::set-output name=result::${MY_VARIABLE}"
+                echo "result=${MY_VARIABLE}" >> $GITHUB_OUTPUT
             
         
