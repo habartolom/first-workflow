@@ -10,13 +10,21 @@ jobs:
         name: My First Job
         runs-on: ubuntu-latest
         outputs:
-            my-output: ${{ steps.print-message.outputs.result }}
+            first-job-output: ${{ steps.print-message.outputs.result }}
         steps:
-            - name: Print a message
-              id: print-message
-              env:
-                MY_VARIABLE: "Hello, World!"
-              run: |
-                echo "result=${MY_VARIABLE}" >> $GITHUB_OUTPUT
-            
-        
+        - name: Print a message
+          id: print-message
+          env:
+            MY_VARIABLE: "Hello, World!"
+          run: |
+            echo "result=${MY_VARIABLE}" >> $GITHUB_OUTPUT
+
+    My-Second-Job:
+        needs: My-First-Job
+        name: My Second Job
+        runs-on: ubuntu-latest
+        steps:
+        - name: Print a message
+          id: print-message
+          run: |
+            echo ${{ needs.My-First-Job.outputs.first-job-output }}
