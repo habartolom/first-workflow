@@ -6,7 +6,7 @@ class PersonaTestCase(unittest.TestCase):
 
     def setUp(self):
         self.persona1 = Persona("Alejandra", 25)
-        self.persona2 = Persona("Diego", 25)
+        self.persona2 = Persona("Diego", 22)
         self.persona3 = Persona("Alejandra", 25)
         self.persona4 = Persona("Diana", 25)
         self.grupo = [self.persona1, self.persona2, self.persona3]
@@ -16,10 +16,10 @@ class PersonaTestCase(unittest.TestCase):
         self.assertEqual(self.persona1.dar_edad(), 25)
 
     def test_anio_nacimiento(self):
-        self.assertEqual(self.persona1.calcular_anio_nacimiento(True), datetime.datetime.now().year - 25)
-        self.assertNotEqual(self.persona1.calcular_anio_nacimiento(False), datetime.datetime.now().year - 25)
-        self.assertEqual(self.persona1.calcular_anio_nacimiento(False), datetime.datetime.now().year - 25 + 1)
-        self.assertNotEqual(self.persona1.calcular_anio_nacimiento(True), datetime.datetime.now().year - 25 + 1)
+      self.assertEqual(self.persona1.calcular_anio_nacimiento(True), datetime.datetime.now().year - 25)
+      self.assertNotEqual(self.persona1.calcular_anio_nacimiento(False), datetime.datetime.now().year - 25)
+      self.assertEqual(self.persona1.calcular_anio_nacimiento(False), datetime.datetime.now().year - 25 + 1)
+      self.assertNotEqual(self.persona1.calcular_anio_nacimiento(True), datetime.datetime.now().year - 25 + 1)
         
     def test_asignacion(self):
         self.persona2.asignar_edad(28)
