@@ -7,7 +7,13 @@ on:
 jobs:
     job1:
         name: Tests
-        runs-on: ubuntu-latest
+        runs-on: ${{ matrix.os }}
+        strategy:
+          matrix:
+            os:
+              - ubuntu-latest
+              - macos-latest
+              - windows-latest
         outputs:
             result: ${{ steps.set-result.outputs.result }}
         steps:
@@ -40,14 +46,15 @@ jobs:
             echo "result=${SUCCESS_MESSAGE}" >> $GITHUB_OUTPUT
         - name: Set result
           id: set-result
+          shell: bash
           env:
             ERROR: ${{ steps.validate-tests-with-errors.outputs.result }}
             SUCCESS: ${{ steps.validate-tests-without-errors.outputs.result }}
           run: |
             if [ "$ERROR" ]; then
-            echo "result=$ERROR" >> $GITHUB_OUTPUT
+              echo "result=$ERROR" >> $GITHUB_OUTPUT
             else
-            echo "result=$SUCCESS" >> $GITHUB_OUTPUT
+              echo "result=$SUCCESS" >> $GITHUB_OUTPUT
             fi
         - name: Coverage report
           id: coverage
