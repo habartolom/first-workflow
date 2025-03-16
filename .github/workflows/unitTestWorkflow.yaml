@@ -54,3 +54,12 @@ jobs:
           run: |
             coverage run -m unittest tests/test_persona.py
             coverage report -m
+    job2:
+        needs: job1
+        name: Print result
+        runs-on: ubuntu-latest
+        steps:
+        - name: Print a message
+          id: print-message
+          run: |
+            echo ${{ needs.job1.outputs.result }}
