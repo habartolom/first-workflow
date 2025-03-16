@@ -40,11 +40,14 @@ jobs:
             echo "result=${SUCCESS_MESSAGE}" >> $GITHUB_OUTPUT
         - name: Set result
           id: set-result
+          env:
+            ERROR: ${{ steps.validate-tests-with-errors.outputs.result }}
+            SUCCESS: ${{ steps.validate-tests-without-errors.outputs.result }}
           run: |
-            if [ "${{ steps.validate-tests-with-errors.outputs.result }}" ]; then
-              echo "result=${{ steps.validate-tests-with-errors.outputs.result }}" >> $GITHUB_OUTPUT
+            if [ "$ERROR" ]; then
+            echo "result=$ERROR" >> $GITHUB_OUTPUT
             else
-              echo "result=${{ steps.validate-tests-without-errors.outputs.result }}" >> $GITHUB_OUTPUT
+            echo "result=$SUCCESS" >> $GITHUB_OUTPUT
             fi
         - name: Coverage report
           id: coverage
