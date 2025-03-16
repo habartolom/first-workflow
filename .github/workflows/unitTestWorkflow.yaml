@@ -8,6 +8,9 @@ jobs:
     job1:
         name: Tests
         runs-on: ubuntu-latest
+        outputs:
+            failed: ${{ steps.validate-tests-with-errors.outputs.failed }}
+            success: ${{ steps.validate-tests-without-errors.outputs.success }}
         steps:
         - name: Checkout repository
           uses: actions/checkout@v3
@@ -22,6 +25,20 @@ jobs:
         - name: Run tests
           id: run-tests
           run: python -m unittest -v tests/test_persona.py
+        - name: Validate tests with errors
+          id: validate-tests-with-errors
+          if: ${{ failure() }}
+          env:
+            ERROR_MESSAGE: "One or more tests failed"
+          run: |
+            echo "failed=${ERROR_MESSAGE}" >> $GITHUB_OUTPUT
+        - name: Validate tests without errors
+          id: validate-tests-without-errors
+          if: ${{ success() }}
+          env:
+            SUCCESS_MESSAGE: "All tests passed"
+          run: |
+            echo "success=${SUCCESS_MESSAGE}" >> $GITHUB_OUTPUT
         - name: Coverage report
           id: coverage
           run: |
