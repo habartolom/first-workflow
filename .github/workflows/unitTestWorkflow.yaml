@@ -9,8 +9,7 @@ jobs:
         name: Tests
         runs-on: ubuntu-latest
         outputs:
-            failed: ${{ steps.validate-tests-with-errors.outputs.failed }}
-            success: ${{ steps.validate-tests-without-errors.outputs.success }}
+            result: ${{ steps.set-result.outputs.result }}
         steps:
         - name: Checkout repository
           uses: actions/checkout@v3
@@ -21,7 +20,7 @@ jobs:
         - name: Install dependencies
           run: |
             python -m pip install --upgrade pip
-            pip install -r requirements.txt
+            pip install -r requirements.txt 
         - name: Run tests
           id: run-tests
           run: python -m unittest -v tests/test_persona.py
@@ -31,14 +30,22 @@ jobs:
           env:
             ERROR_MESSAGE: "One or more tests failed"
           run: |
-            echo "failed=${ERROR_MESSAGE}" >> $GITHUB_OUTPUT
+            echo "result=${ERROR_MESSAGE}" >> $GITHUB_OUTPUT
         - name: Validate tests without errors
           id: validate-tests-without-errors
           if: ${{ success() }}
           env:
             SUCCESS_MESSAGE: "All tests passed"
           run: |
-            echo "success=${SUCCESS_MESSAGE}" >> $GITHUB_OUTPUT
+            echo "result=${SUCCESS_MESSAGE}" >> $GITHUB_OUTPUT
+        - name: Set result
+          id: set-result
+          run: |
+            if [ "${{ steps.validate-tests-with-errors.outputs.result }}" ]; then
+              echo "result=${{ steps.validate-tests-with-errors.outputs.result }}" >> $GITHUB_OUTPUT
+            else
+              echo "result=${{ steps.validate-tests-without-errors.outputs.result }}" >> $GITHUB_OUTPUT
+            fi
         - name: Coverage report
           id: coverage
           run: |
